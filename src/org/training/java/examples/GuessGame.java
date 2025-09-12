@@ -4,53 +4,46 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GuessGame {
-    public static void main(String[] args) {
-        Scanner scannerLoc = new Scanner(System.in);
-        int[]   scores     = new int[10];
-        int scoreIndex = 0;
-        Random  randomLoc  = new Random();
+    public static final int GAME_ITER_COUNT          = 10;
+    public static final int GAME_SCORE_ARCHIVE_COUNT = 10;
 
-        while (true) {
-            System.out.println("Oyun menüsü:");
-            System.out.println("1-Oyuna başla");
-            System.out.println("2-Oyun skorları");
-            System.out.println("3-Çıkış");
-            System.out.println("Seçiminiz : ");
-            int menuIndex = scannerLoc.nextInt();
-            switch (menuIndex) {
-                case 1: {
-                    int randomInt = randomLoc.nextInt(100);
-                    System.out.println("Bir sayı tuttum. " + randomInt);
-                    for (int i = 0; i < 10; i++) {
-                        System.out.println("Tahminin nedir : ");
-                        int guessNumber = scannerLoc.nextInt();
-                        if (guessNumber == randomInt) {
-                            int score = 10 - i;
-                            System.out.println("Bildiniz ve skorunuz : " + score);
-                            scores[scoreIndex % 10] = score;
-                            scoreIndex++;
-                            break;
-                        } else if (guessNumber > randomInt) {
-                            System.out.println("Tahmininiz büyük");
-                        } else {
-                            System.out.println("Tahmininiz küçük");
-                        }
-                    }
-                }
+    private Random random     = new Random();
+    private int[]  scores     = new int[GAME_SCORE_ARCHIVE_COUNT];
+    private int    scoreIndex = 0;
+
+    public void showScores() {
+        System.out.println("son " + GAME_SCORE_ARCHIVE_COUNT + " skor :");
+        for (int i = 0; i < GAME_SCORE_ARCHIVE_COUNT; i++) {
+            int index = (scoreIndex + i) % GAME_SCORE_ARCHIVE_COUNT;
+            System.out.println((i + 1) + "." + scores[index]);
+        }
+    }
+
+    public void printMenu() {
+        System.out.println("Oyun menüsü:");
+        System.out.println("1-Oyuna başla");
+        System.out.println("2-Oyun skorları");
+        System.out.println("3-Çıkış");
+        System.out.println("Seçiminiz : ");
+    }
+
+    public void startGame(final Scanner scannerLoc) {
+        int randomInt = this.random.nextInt(100);
+        System.out.println("Bir sayı tuttum. " + randomInt);
+        for (int i = 0; i < GAME_ITER_COUNT; i++) {
+            System.out.println("Tahminin nedir : ");
+            int guessNumber = scannerLoc.nextInt();
+            if (guessNumber == randomInt) {
+                int score = GAME_ITER_COUNT - i;
+                System.out.println("Bildiniz ve skorunuz : " + score);
+                scores[scoreIndex % GAME_SCORE_ARCHIVE_COUNT] = score;
+                scoreIndex++;
                 break;
-                case 2: {
-                    System.out.println("son 10 skor :");
-                    for (int i = 0; i < 10; i++) {
-                        int index = (scoreIndex + i) % 10;
-                        System.out.println((i + 1) + "." + scores[index]);
-                    }
-                    break;
-                }
-                case 3:
-                default:
-                    return;
+            } else if (guessNumber > randomInt) {
+                System.out.println("Tahmininiz büyük");
+            } else {
+                System.out.println("Tahmininiz küçük");
             }
-
         }
     }
 }
