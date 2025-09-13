@@ -3,8 +3,8 @@ package org.training.java.examples.language.oo.basics;
 public abstract class Car implements IMoving {
 
     private int currentSpeed;
-    private int maxSpeed;
-    private int avgSpeed;
+    private final int maxSpeed;
+    private final int avgSpeed;
 
     public Car(final int maxSpeedParam,
                final int avgSpeedParam) {
